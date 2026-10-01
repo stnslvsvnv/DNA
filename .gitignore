@@ -1,4 +1,7 @@
-.dna/
+# DNA feature state (contracts, checks, reports, ADRs) is intentionally
+# committed into the feature branch. Only transient artifacts are ignored.
+.dna/**/__pycache__/
+.dna/**/*.tmp
 __pycache__/
 *.py[cod]
 .pytest_cache/

@@ -1,0 +1,97 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dna-agile/dossier.schema.json",
+  "title": "DNA Dossier",
+  "description": "Machine view of dna-disco output. Consumed by dna-split.",
+  "type": "object",
+  "required": [
+    "feature_slug",
+    "created_at",
+    "team",
+    "domains_candidates",
+    "coupling_points_candidates",
+    "estimated_cycles"
+  ],
+  "properties": {
+    "feature_slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "created_at": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "team": {
+      "type": "object",
+      "required": ["size", "members"],
+      "properties": {
+        "size": {"type": "integer", "minimum": 1, "maximum": 20},
+        "members": {
+          "type": "array",
+          "items": {"type": "string"},
+          "minItems": 1
+        }
+      }
+    },
+    "domains_candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "summary", "use_cases"],
+        "properties": {
+          "id": {"type": "string"},
+          "summary": {"type": "string"},
+          "use_cases": {"type": "array", "items": {"type": "string"}},
+          "potential_owner": {"type": "string"}
+        }
+      }
+    },
+    "coupling_points_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "from", "to", "kind", "description"],
+        "properties": {
+          "id": {"type": "string"},
+          "from": {"type": "string"},
+          "to": {"type": "string"},
+          "kind": {
+            "type": "string",
+            "enum": ["rest", "event", "shared-data", "rpc"]
+          },
+          "description": {"type": "string"}
+        }
+      }
+    },
+    "shared_kernel_candidates": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "strategy_proposal"],
+        "properties": {
+          "id": {"type": "string"},
+          "strategy_proposal": {
+            "type": "string",
+            "enum": ["co-developed", "delegated", "external"]
+          }
+        }
+      }
+    },
+    "estimated_cycles": {"type": "integer", "minimum": 1},
+    "risks": {"type": "array", "items": {"type": "string"}},
+    "nfrs": {"type": "array", "items": {"type": "string"}},
+    "requirements_stable_for_cycle": {"type": "boolean"},
+    "lane_results": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["lane", "path"],
+        "properties": {
+          "lane": {"type": "string"},
+          "path": {"type": "string"}
+        }
+      }
+    }
+  }
+}

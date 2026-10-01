@@ -1,0 +1,35 @@
+# DNA project profile — copy to .dna/project.yaml and fill in.
+# Validated by: python scripts/dna/validate_project.py
+#
+# This is the initial setup of a DNA deployment: the tracker, the team, and
+# the lane (spiral) assignments. See dna-bootstrap.md for the full procedure.
+version: 1
+
+tracker:
+  kind: linear      # only Linear is supported out of the box
+  team: CIT         # Linear team key that hosts DNA issues
+
+members:            # every human or agent that can own a lane
+  alice:
+    name: Alice
+    linear: alice@example.com    # Linear username or email
+  bob:
+    name: Bob
+    linear: bob@example.com
+
+lanes:              # the parallel lanes (spirals) and their leaders
+  spiral_a:
+    leader: alice
+    executor: human              # human | agent:<name>
+  spiral_b:
+    leader: bob
+    executor: human
+
+initiator: alice    # drives dna-disco and dna-split, approves REVIEW.md
+
+# Optional companion tooling (3A, knowledge graph, call graph). DNA works
+# without it; when declared, the corresponding checks become hard gates.
+# intelligence:
+#   graph_freshness_cmd: "python scripts/check_graph_freshness.py"
+#   graph_update_cmd: "python scripts/update_graphify_no_viz.py ."
+#   call_graph_path: "context/index/call_graph.json"

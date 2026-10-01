@@ -1,0 +1,65 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dna/project.schema.json",
+  "title": "DNA Project Profile",
+  "description": "Per-repository DNA setup: tracker, members, lane assignments. Stored at .dna/project.yaml. Created by dna-bootstrap, validated by scripts/dna/validate_project.py.",
+  "type": "object",
+  "required": ["version", "tracker", "members", "lanes", "initiator"],
+  "properties": {
+    "version": {"const": 1},
+    "tracker": {
+      "type": "object",
+      "required": ["team"],
+      "properties": {
+        "kind": {"type": "string", "enum": ["linear"], "default": "linear"},
+        "team": {"type": "string", "description": "Linear team key, e.g. CIT"}
+      }
+    },
+    "members": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": {"type": "string"},
+          "linear": {"type": "string", "description": "Linear username or email"}
+        }
+      }
+    },
+    "lanes": {
+      "type": "object",
+      "required": ["spiral_a", "spiral_b"],
+      "properties": {
+        "spiral_a": {"$ref": "#/definitions/lane"},
+        "spiral_b": {"$ref": "#/definitions/lane"}
+      }
+    },
+    "initiator": {"type": "string", "description": "Member id that drives dna-disco/dna-split"},
+    "intelligence": {
+      "type": "object",
+      "description": "Optional companion tooling; absence never blocks DNA.",
+      "properties": {
+        "graph_freshness_cmd": {"type": "string"},
+        "graph_update_cmd": {"type": "string"},
+        "call_graph_path": {"type": "string"}
+      }
+    },
+    "branching": {
+      "type": "object",
+      "properties": {
+        "protected": {"type": "array", "items": {"type": "string"}}
+      }
+    }
+  },
+  "definitions": {
+    "lane": {
+      "type": "object",
+      "required": ["leader"],
+      "properties": {
+        "leader": {"type": "string", "description": "Member id"},
+        "executor": {"type": "string", "description": "human | agent:<name>"}
+      }
+    }
+  }
+}
