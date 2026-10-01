@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "dna-agile/contract.schema.json",
+  "title": "DNA Connector Contract",
+  "description": "Frozen contract for one connector (one cycle). Produced by dna-split.",
+  "type": "object",
+  "required": [
+    "connector_id",
+    "cycle",
+    "kind",
+    "version",
+    "spirals",
+    "schema",
+    "contract_tests",
+    "signed_by",
+    "signed_at"
+  ],
+  "properties": {
+    "connector_id": {"type": "string"},
+    "cycle": {"type": "integer", "minimum": 1},
+    "kind": {
+      "type": "string",
+      "enum": ["rest", "event", "shared-data", "rpc"]
+    },
+    "version": {
+      "type": "string",
+      "description": "Semver or ISO-date-based version"
+    },
+    "spirals": {
+      "type": "object",
+      "required": ["producer", "consumer"],
+      "properties": {
+        "producer": {"type": "string", "enum": ["A", "B", "a", "b"]},
+        "consumer": {"type": "string", "enum": ["A", "B", "a", "b"]}
+      }
+    },
+    "schema": {
+      "type": "object",
+      "description": "OpenAPI fragment, Protobuf reference, or event schema"
+    },
+    "contract_tests": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "oneOf": [
+          {"type": "string"},
+          {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": {"type": "string"},
+              "side": {"type": "string", "enum": ["producer", "consumer", "both"]}
+            }
+          }
+        ]
+      }
+    },
+    "integration_tests": {
+      "type": "array",
+      "items": {
+        "oneOf": [
+          {"type": "string"},
+          {
+            "type": "object",
+            "required": ["path"],
+            "properties": {
+              "path": {"type": "string"}
+            }
+          }
+        ]
+      }
+    },
+    "mock": {
+      "type": "object",
+      "properties": {
+        "producer_mock": {"type": "string"},
+        "consumer_mock": {"type": "string"}
+      }
+    },
+    "signed_by": {
+      "type": "object",
+      "required": ["spiral_a_leader", "spiral_b_leader"],
+      "properties": {
+        "spiral_a_leader": {"type": "string"},
+        "spiral_b_leader": {"type": "string"}
+      }
+    },
+    "signed_at": {"type": "string", "format": "date-time"}
+  }
+}
